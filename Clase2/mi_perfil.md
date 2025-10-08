@@ -36,7 +36,7 @@
 ---
 
 ###  Imagen relacionada con mi área
-![Imagen](https://www.significados.com/software/)
+![Imagen](https://storage.googleapis.com/gweb-cloudblog-publish/images/Cloud_Code.max-2600x2600.png)
 
 ---
 
