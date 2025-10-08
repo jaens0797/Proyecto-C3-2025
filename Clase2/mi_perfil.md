@@ -36,7 +36,7 @@
 ---
 
 ###  Imagen relacionada con mi área
-![Imagen de desarrollo de software](https://cdn.pixabay.com/photo/2015/01/08/18/26/startup-593327_1280.jpg)
+![Desarrollo de software](https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png)
 
 ---
 
