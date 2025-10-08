@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Semana 2</h1>
+
+   <form>
+        <div class="input-container">
+            <label for="txtPeso">Peso:</label>
+            <input type="number" id="txtPeso">
+        </div>
+        
+        <div class="input-container">
+            <label for="txtAltura">Altura:</label>
+            <input type="number" id="txtAltura">
+        </div>
+
+        <div class="input-container">
+            <label for="txtImc">IMC:</label>
+            <output id="txtImc"></output>
+        </div>
+
+        <div class="input-container">
+            <label for="txtClasificacion">Clasificación:</label>
+            <output id="txtClasificacion"></output>
+        </div>
+        
+        <button type="button" id="btnCalcularImc">Calcular imc</button>
+
+   </form>
+
+   <hr>
+
+   <form>
+    <div>
+        <label for="">Figura</label>
+        <select id="sltFigura">
+            <option value="">--Seleccione la figura --</option>
+            <option value="1">Cuadrado</option>
+            <option value="2">Rectángulo</option>
+            <option value="3">Círculo</option>
+
+        </select>
+    </div>
+    <div>
+        <label for="txtLado">Lado:</label>
+        <input type="number" id="txtLado">
+    </div>
+
+    <div>
+        <label for="txtBase">Base:</label>
+        <input type="number" id="txtBase">
+    </div>
+
+    <div>
+        <label for="txtAltura">Altura:</label>
+        <input type="number" id="txtAltura">
+    </div>
+
+     <div>
+        <label for="txtRadio">Radio:</label>
+        <input type="number" id="txtRadio">
+    </div>
+    
+    <div>
+        <label for="txtArea">Área:</label>
+        <output id="txtArea"></output>
+    </div>
+
+    <button type="button" id="btnCalcularArea">Calcular área</button>
+       
+   </form>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/index.js" defer></script>
+</body>
+</html>
