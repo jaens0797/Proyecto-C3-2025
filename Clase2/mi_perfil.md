@@ -36,7 +36,7 @@
 ---
 
 ###  Imagen relacionada con mi área
-![Desarrollo de software](https://www.google.com/images/branding/product/2x/code_color_160x160dp.png)
+![Desarrollo de software](https://www.significados.com/software/g) 
 
 ---
 
