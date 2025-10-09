@@ -1,11 +1,20 @@
 
 ---
 
+![Imagen de la plataforma web](https://ucenfotec.ac.cr/ecommerce/wp-content/uploads/sites/13/2022/08/LogoCenfotec200x200.png)
+
+
+
 ## Datos generales del proyecto
+
 **Nombre del curso:** Introducción a la Ingeniería del Software  
+
 **Fecha de Entrega:** 19 de Octubre de 2025
+
 **Tipo de actividad:** Avance de proyecto  
+
 **Integrantes del grupo:**  
+
 - Evelyn Esquivel  
 - Jaen Mora 
 
