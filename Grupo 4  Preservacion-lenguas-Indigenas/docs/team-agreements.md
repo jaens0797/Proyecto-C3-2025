@@ -24,7 +24,7 @@
 - Crear las páginas: Recursos, Cursos, Diccionario.
 - Crear repositorios de GitHub para el proyecto.
 
-### 👤 Evelyn Esquivel – Backend Owner
+### 👤 Evelyn Esquivel Cortés – Backend Owner
 
 - Trabajr en Jira y unirse al repositorio de GitHub.
 - Crear las hisotrias de usuarios, recursos, cursos y eventos.
