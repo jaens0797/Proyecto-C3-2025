@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../FRONT-END"
+		},
+		{
+			"path": "../../../../../GitHub/Proyecto-C3-2025"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Proyecto-C3-2025"
+	}
+}
