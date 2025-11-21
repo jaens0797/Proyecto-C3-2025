@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro de usuarios</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+  <h1>Registro de usuarios</h1>
+
+  <form id="formUsuario">
+    <div>
+      <label for="txtNombre">Nombre completo</label>
+      <input type="text" id="txtNombre" required />
+    </div>
+
+    <div>
+      <label for="txtCorreo">Correo electrónico</label>
+      <input type="email" id="txtCorreo" required />
+    </div>
+
+    <div>
+      <label for="slcRol">Rol</label>
+      <select id="slcRol" required>
+        <option value="">Seleccione un rol</option>
+        <option value="administrador">Administrador</option>
+        <option value="lider">Líder comunitario</option>
+        <option value="docente">Docente intercultural</option>
+        <option value="estudiante">Estudiante</option>
+        <option value="publico">Público general</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="txtContrasenna">Contraseña</label>
+      <input type="password" id="txtContrasenna" minlength="6" required />
+    </div>
+
+    <div>
+      <label for="txtConfirmacion">Confirmar contraseña</label>
+      <input type="password" id="txtConfirmacion" minlength="6" required />
+    </div>
+
+    <button type="button" id="btnGuardarUsuario">Guardar usuario</button>
+  </form>
+
+  <p>
+    <a href="lista-usuarios.html">Ver lista de usuarios</a> |
+    <a href="index.html">Volver al menú</a>
+  </p>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="js/registrar-usuario.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro de recursos culturales</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+  <h1>Registro de recursos culturales</h1>
+
+  <form id="formRecurso">
+    <div>
+      <label for="txtTituloRec">Título del recurso</label>
+      <input type="text" id="txtTituloRec" required />
+    </div>
+
+    <div>
+      <label for="slcTipoRec">Tipo de recurso</label>
+      <select id="slcTipoRec" required>
+        <option value="">Seleccione un tipo</option>
+        <option value="audio">Audio</option>
+        <option value="video">Video</option>
+        <option value="texto">Texto</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="txtPuebloRec">Pueblo indígena</label>
+      <input type="text" id="txtPuebloRec" required />
+    </div>
+
+    <div>
+      <label for="txtComunidadRec">Comunidad (opcional)</label>
+      <input type="text" id="txtComunidadRec" />
+    </div>
+
+    <div>
+      <label for="txtUrlRec">URL del recurso</label>
+      <input type="text" id="txtUrlRec" required />
+    </div>
+
+    <div>
+      <label for="txtNarradorRec">Narrador</label>
+      <input type="text" id="txtNarradorRec" />
+    </div>
+
+    <div>
+      <label>
+        <input type="checkbox" id="chkEsAncianoRec" />
+        El narrador es un anciano de la comunidad
+      </label>
+    </div>
+
+    <div>
+      <label>
+        <input type="checkbox" id="chkValidadoRec" />
+        Validado culturalmente por líder comunitario
+      </label>
+    </div>
+
+    <div>
+      <label for="txtDescripcionRec">Descripción</label>
+      <textarea id="txtDescripcionRec"></textarea>
+    </div>
+
+    <button type="button" id="btnGuardarRecurso">Guardar recurso</button>
+  </form>
+
+  <p>
+    <a href="lista-recursos.html">Ver banco de recursos</a> |
+    <a href="index.html">Volver al menú</a>
+  </p>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="js/registrar-recurso.js"></script>
+</body>
+</html>

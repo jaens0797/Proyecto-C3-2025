@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro de comunidades</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+  <h1>Registro de comunidades indígenas</h1>
+
+  <form id="formComunidad">
+    <div>
+      <label for="txtNombreCom">Nombre de la comunidad</label>
+      <input type="text" id="txtNombreCom" required />
+    </div>
+
+    <div>
+      <label for="txtPuebloCom">Pueblo indígena</label>
+      <input type="text" id="txtPuebloCom" required />
+    </div>
+
+    <div>
+      <label for="txtProvinciaCom">Provincia</label>
+      <input type="text" id="txtProvinciaCom" required />
+    </div>
+
+    <div>
+      <label for="txtCantonCom">Cantón</label>
+      <input type="text" id="txtCantonCom" required />
+    </div>
+
+    <div>
+      <label for="txtDistritoCom">Distrito</label>
+      <input type="text" id="txtDistritoCom" required />
+    </div>
+
+    <div>
+      <label for="txtEstadoLenguaCom">Estado de la lengua</label>
+      <input type="text" id="txtEstadoLenguaCom" required />
+    </div>
+
+    <div>
+      <label for="txtDescripcionCom">Descripción</label>
+      <textarea id="txtDescripcionCom"></textarea>
+    </div>
+
+    <button type="button" id="btnGuardarComunidad">Guardar comunidad</button>
+  </form>
+
+  <p>
+    <a href="lista-comunidades.html">Ver lista de comunidades</a> |
+    <a href="index.html">Volver al menú</a>
+  </p>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="js/registrar-comunidad.js"></script>
+</body>
+</html>
