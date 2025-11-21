@@ -13,10 +13,17 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+// Middleware de CORS (igual estilo que el ejemplo)
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token,Authorization');
+    res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+    );
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Origin, Accept, Content-Type, X-Requested-With'
+    );
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
@@ -29,11 +36,15 @@ mongoose.connect(process.env.MONGO_URI,{
 
 //Rutas
 
+app.use('/api', require('./routes/usuario.route'));
+app.use('/api', require('./routes/comunidad.route'));
+app.use('/api', require('./routes/recurso.route'));
+app.use('/api', require('./routes/curso.route'));
+app.use('/api', require('./routes/diccionario.route'));
+app.use('/api', require('./routes/evento.route'));
+
+
 //Iniciar servidor
 app.listen(PORT, ()=>{
     console.log('Servidor corriendo en http://localhost:3000');
 });
-
-app.use('/api', require('./routes/usuario.route'));
-app.use('/api', require('./routes/libro.route'));
-
