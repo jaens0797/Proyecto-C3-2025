@@ -24,43 +24,27 @@ router.post('/registrar-evento', async (req, res) => {
 // http://localhost:3000/api/listar-eventos
 router.get('/listar-eventos', async (req, res) => {
     try {
-        let eventos = await Evento.find();
+        const eventos = await Evento.find().sort({ fecha: 1 }); // del más cercano al más lejano
         res.json(eventos);
     } catch (error) {
         res.json({ error });
     }
 });
 
-// http://localhost:3000/api/buscar-evento/:id
-router.get('/buscar-evento/:id', async (req, res) => {
+// http://localhost:3000/api/editar-evento/:id
+router.put('/editar-evento/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        let evento = await Evento.findById(id);
-        res.json(evento);
-    } catch (error) {
-        res.json({ error });
-    }
-});
+        const datos = {
+            titulo: req.body.titulo,
+            descripcion: req.body.descripcion,
+            fecha: req.body.fecha,
+            lugar: req.body.lugar,
+            pueblo: req.body.pueblo,
+            tipoEvento: req.body.tipoEvento
+        };
 
-// http://localhost:3000/api/actualizar-evento/:id
-router.put('/actualizar-evento/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-
-        await Evento.updateOne(
-            { _id: id },
-            {
-                $set: {
-                    titulo: req.body.titulo,
-                    descripcion: req.body.descripcion,
-                    fecha: req.body.fecha,
-                    lugar: req.body.lugar,
-                    pueblo: req.body.pueblo,
-                    tipoEvento: req.body.tipoEvento
-                }
-            }
-        );
-
+        await Evento.findByIdAndUpdate(id, datos, { new: true });
         res.json({ msj: 'El evento se actualizó correctamente' });
     } catch (error) {
         res.json({ error });
@@ -79,4 +63,5 @@ router.delete('/eliminar-evento/:id', async (req, res) => {
 });
 
 module.exports = router;
+
 

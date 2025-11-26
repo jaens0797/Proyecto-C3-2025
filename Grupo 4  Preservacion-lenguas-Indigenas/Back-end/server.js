@@ -17,10 +17,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(() => {
-    console.log('Conexión a MongoDB exitosa');
-}).catch((error) => {
-    console.error('Error conectando a MongoDB', error);
+})
+.then(() => {
+    console.log('✅ Conectado a MongoDB');
+})
+.catch((error) => {
+    console.error('❌ Error al conectar a MongoDB', error);
 });
 
 // Rutas
@@ -31,8 +33,14 @@ app.use('/api', require('./routes/curso.route'));
 app.use('/api', require('./routes/diccionario.route'));
 app.use('/api', require('./routes/evento.route'));
 
+// Ruta base de prueba
+app.get('/', (req, res) => {
+    res.json({ msj: 'API Preservación Lenguas Indígenas funcionando' });
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
 

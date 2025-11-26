@@ -26,45 +26,29 @@ router.post('/registrar-curso', async (req, res) => {
 // http://localhost:3000/api/listar-cursos
 router.get('/listar-cursos', async (req, res) => {
     try {
-        let cursos = await Curso.find();
+        const cursos = await Curso.find();
         res.json(cursos);
     } catch (error) {
         res.json({ error });
     }
 });
 
-// http://localhost:3000/api/buscar-curso/:id
-router.get('/buscar-curso/:id', async (req, res) => {
+// http://localhost:3000/api/editar-curso/:id
+router.put('/editar-curso/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        let curso = await Curso.findById(id);
-        res.json(curso);
-    } catch (error) {
-        res.json({ error });
-    }
-});
+        const datos = {
+            nombre: req.body.nombre,
+            pueblo: req.body.pueblo,
+            nivel: req.body.nivel,
+            descripcion: req.body.descripcion,
+            duracionHoras: req.body.duracionHoras,
+            tieneAudio: req.body.tieneAudio,
+            tieneEscritura: req.body.tieneEscritura,
+            tieneEvaluaciones: req.body.tieneEvaluaciones
+        };
 
-// http://localhost:3000/api/actualizar-curso/:id
-router.put('/actualizar-curso/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-
-        await Curso.updateOne(
-            { _id: id },
-            {
-                $set: {
-                    nombre: req.body.nombre,
-                    pueblo: req.body.pueblo,
-                    nivel: req.body.nivel,
-                    descripcion: req.body.descripcion,
-                    duracionHoras: req.body.duracionHoras,
-                    tieneAudio: req.body.tieneAudio,
-                    tieneEscritura: req.body.tieneEscritura,
-                    tieneEvaluaciones: req.body.tieneEvaluaciones
-                }
-            }
-        );
-
+        await Curso.findByIdAndUpdate(id, datos, { new: true });
         res.json({ msj: 'El curso se actualizó correctamente' });
     } catch (error) {
         res.json({ error });
@@ -83,4 +67,5 @@ router.delete('/eliminar-curso/:id', async (req, res) => {
 });
 
 module.exports = router;
+
 

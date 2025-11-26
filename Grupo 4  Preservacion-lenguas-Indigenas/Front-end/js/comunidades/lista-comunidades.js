@@ -5,6 +5,7 @@ async function cargarComunidades() {
     const res = await fetch('http://localhost:3000/api/listar-comunidades');
     const datos = await res.json();
 
+    // Limpiar tabla
     tbodyComunidades.innerHTML = '';
 
     datos.forEach(com => {
@@ -28,6 +29,8 @@ async function cargarComunidades() {
       const tdEstado = document.createElement('td');
       tdEstado.textContent = com.estadoLengua;
 
+      // 👉 Si tus profes NO han hecho eliminar todavía, dejalo así
+      // (sin eliminar, solo mostrar lista)
       fila.appendChild(tdNombre);
       fila.appendChild(tdPueblo);
       fila.appendChild(tdProvincia);
@@ -37,9 +40,11 @@ async function cargarComunidades() {
 
       tbodyComunidades.appendChild(fila);
     });
+
   } catch (error) {
     console.error('Error al cargar comunidades', error);
   }
 }
 
 cargarComunidades();
+
