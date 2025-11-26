@@ -1,90 +1,94 @@
-const inputTituloRec = document.getElementById('txtTituloRec');
-const selectTipoRec = document.getElementById('slcTipoRec');
-const inputPuebloRec = document.getElementById('txtPuebloRec');
-const inputComunidadRec = document.getElementById('txtComunidadRec');
-const inputUrlRec = document.getElementById('txtUrlRec');
-const inputNarradorRec = document.getElementById('txtNarradorRec');
-const chkEsAncianoRec = document.getElementById('chkEsAncianoRec');
-const chkValidadoRec = document.getElementById('chkValidadoRec');
-const inputDescripcionRec = document.getElementById('txtDescripcionRec');
+const inputTituloRecurso = document.getElementById('txtTituloRecurso');
+const selectTipoRecurso = document.getElementById('sltTipoRecurso');
+const inputPuebloRecurso = document.getElementById('txtPuebloRecurso');
+const inputComunidadRecurso = document.getElementById('txtComunidadRecurso');
+const inputUrlRecurso = document.getElementById('txtUrlRecurso');
+const inputNarradorRecurso = document.getElementById('txtNarradorRecurso');
+const chkEsAnciano = document.getElementById('chkEsAnciano');
+const chkValidado = document.getElementById('chkValidado');
+const txtDescripcionRecurso = document.getElementById('txtDescripcionRecurso');
 const btnGuardarRecurso = document.getElementById('btnGuardarRecurso');
 
-const camposRecurso = document.querySelectorAll('#formRecurso :required');
-
 function limpiarErroresRecurso() {
-  camposRecurso.forEach(campo => campo.classList.remove('inputError'));
+  const campos = document.querySelectorAll('.inputError');
+  campos.forEach(c => c.classList.remove('inputError'));
 }
 
 function validarRecurso() {
-  let valido = true;
+  let error = false;
   limpiarErroresRecurso();
 
-  camposRecurso.forEach(campo => {
-    if (campo.value.trim() === '') {
-      valido = false;
-      campo.classList.add('inputError');
-    }
-  });
-
-  if (!valido) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Datos incompletos',
-      text: 'Complete los campos obligatorios'
-    });
+  if (!inputTituloRecurso.value.trim()) {
+    inputTituloRecurso.classList.add('inputError');
+    error = true;
   }
 
-  return valido;
+  if (!selectTipoRecurso.value.trim()) {
+    selectTipoRecurso.classList.add('inputError');
+    error = true;
+  }
+
+  if (!inputPuebloRecurso.value.trim()) {
+    inputPuebloRecurso.classList.add('inputError');
+    error = true;
+  }
+
+  if (!inputUrlRecurso.value.trim()) {
+    inputUrlRecurso.classList.add('inputError');
+    error = true;
+  }
+
+  if (error) {
+    alert('Revisá los campos marcados en rojo (título, tipo, pueblo y URL son obligatorios).');
+  }
+
+  return !error;
 }
 
 async function guardarRecurso() {
-  if (!validarRecurso()) return;
+  if (!validarRecurso()) {
+    return;
+  }
 
-  const datos = {
-    titulo: inputTituloRec.value.trim(),
-    tipoRecurso: selectTipoRec.value,
-    pueblo: inputPuebloRec.value.trim(),
-    comunidad: inputComunidadRec.value.trim(),
-    descripcion: inputDescripcionRec.value.trim(),
-    url: inputUrlRec.value.trim(),
-    narrador: inputNarradorRec.value.trim(),
-    esAnciano: chkEsAncianoRec.checked,
-    validadoCulturalmente: chkValidadoRec.checked
+  const datosRecurso = {
+    titulo: inputTituloRecurso.value.trim(),
+    tipoRecurso: selectTipoRecurso.value.trim(),
+    pueblo: inputPuebloRecurso.value.trim(),
+    comunidad: inputComunidadRecurso.value.trim(),
+    descripcion: txtDescripcionRecurso.value.trim(),
+    url: inputUrlRecurso.value.trim(),
+    narrador: inputNarradorRecurso.value.trim(),
+    esAnciano: chkEsAnciano.checked,
+    validadoCulturalmente: chkValidado.checked
   };
 
   try {
     const res = await fetch('http://localhost:3000/api/registrar-recurso', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(datos)
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datosRecurso)
     });
 
     const data = await res.json();
 
-    if (!res.ok || data.error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al registrar',
-        text: data.msj || 'No se pudo guardar el recurso'
-      });
-      return;
+    if (data.error) {
+      console.error('Error al registrar recurso', data.error);
+      alert('Ocurrió un error al registrar el recurso.');
+    } else {
+      alert('Recurso registrado correctamente.');
+      document.getElementById('formRecurso').reset();
     }
 
-    Swal.fire({
-      icon: 'success',
-      title: 'Recurso guardado',
-      text: 'El recurso se registró correctamente'
-    });
-
-    document.getElementById('formRecurso').reset();
   } catch (error) {
-    console.error(error);
-    Swal.fire({
-      icon: 'error',
-      title: 'Error de conexión',
-      text: 'No se pudo conectar con el servidor'
-    });
+    console.error('Error de conexión al registrar recurso', error);
+    alert('No se pudo conectar con el servidor.');
   }
 }
 
-btnGuardarRecurso.addEventListener('click', guardarRecurso);
+btnGuardarRecurso.addEventListener('click', function (e) {
+  e.preventDefault(); 
+  guardarRecurso();
+});
+
