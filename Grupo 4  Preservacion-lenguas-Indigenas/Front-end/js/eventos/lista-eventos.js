@@ -5,7 +5,10 @@ async function cargarEventos() {
     const res = await fetch('http://localhost:3000/api/listar-eventos');
     let datos = await res.json();
 
-    // RF-21 — ordenar por fecha ascendente
+    // Limpiar tabla
+    tbodyEventos.innerHTML = '';
+
+    // Ordenar por fecha ascendente (del más cercano al más lejano)
     datos = datos.sort(function (a, b) {
       const fechaA = new Date(a.fecha);
       const fechaB = new Date(b.fecha);
@@ -16,30 +19,27 @@ async function cargarEventos() {
 
   } catch (error) {
     console.error('Error al cargar eventos', error);
+    alert('Ocurrió un error al cargar los eventos.');
   }
 }
 
-function formatearFecha(fechaISO) {
-  if (!fechaISO) return '';
-  const fecha = new Date(fechaISO);
-  return fecha.toLocaleDateString('es-CR', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
-}
-
-function mostrarEventos(eventos) {
+function mostrarEventos(lista) {
+  // Por si acaso, limpiar antes de dibujar
   tbodyEventos.innerHTML = '';
 
-  eventos.forEach(ev => {
+  lista.forEach(function (ev) {
     const fila = document.createElement('tr');
 
     const tdTitulo = document.createElement('td');
-    tdTitulo.textContent = ev.titulo;
+    tdTitulo.textContent = ev.titulo || '';
 
     const tdFecha = document.createElement('td');
-    tdFecha.textContent = formatearFecha(ev.fecha);
+    if (ev.fecha) {
+      const fechaObj = new Date(ev.fecha);
+      tdFecha.textContent = fechaObj.toLocaleDateString('es-CR');
+    } else {
+      tdFecha.textContent = '';
+    }
 
     const tdLugar = document.createElement('td');
     tdLugar.textContent = ev.lugar || '';

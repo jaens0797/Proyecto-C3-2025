@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Diccionario digital - Lenguas indígenas</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+  <h1>Diccionario digital (español → lengua indígena)</h1>
+
+  <form id="formDiccionario">
+    <div>
+      <label for="txtPalabraBuscar">Palabra en español</label>
+      <input type="text" id="txtPalabraBuscar" placeholder="Ej. maíz, río, familia" />
+    </div>
+
+    <div>
+      <button id="btnBuscarPalabra">Buscar en diccionario</button>
+    </div>
+  </form>
+
+  <hr />
+
+  <div id="resultadoDiccionario">
+    <!-- Aquí js/diccionario/diccionario.js va a dibujar el resultado -->
+  </div>
+
+  <p>
+    <a href="index.html">Volver al menú principal</a>
+  </p>
+
+  <!-- Lógica del diccionario -->
+  <script src="js/diccionario/diccionario.js"></script>
+</body>
+</html>
