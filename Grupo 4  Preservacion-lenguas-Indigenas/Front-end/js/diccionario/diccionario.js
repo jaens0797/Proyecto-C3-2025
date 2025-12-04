@@ -10,6 +10,9 @@ const btnVerTodos = document.getElementById('btnVerTodos');
 const inputBuscar = document.getElementById('txtBuscar');
 const tbodyDiccionario = document.getElementById('tbodyDiccionario');
 
+// 👉 aquí guardamos todo lo que viene de la BD
+let listaTerminos = [];
+
 // LIMPIAR
 function limpiarFormularioDiccionario() {
   inputTerminoEspanol.value = '';
@@ -48,8 +51,9 @@ async function registrarTermino() {
     });
 
     let json = await res.json();
-    alert(json.msj);
+    alert(json.msj || 'Término registrado correctamente');
     limpiarFormularioDiccionario();
+    // recargar la lista para incluir el nuevo
     cargarTerminosDiccionario();
   } catch (error) {
     alert('No se pudo registrar.');
@@ -92,35 +96,56 @@ function llenarTablaDiccionario(lista) {
   });
 }
 
-// LISTAR
+// LISTAR (traer todo de la BD)
 async function cargarTerminosDiccionario() {
   try {
     let res = await fetch('http://localhost:3000/api/listar-terminos');
     let datos = await res.json();
-    llenarTablaDiccionario(datos);
+    // guardamos la lista completa en memoria
+    listaTerminos = datos;
+    llenarTablaDiccionario(listaTerminos);
   } catch (error) {
     alert('Error al cargar.');
   }
 }
 
-// BUSCAR
-async function buscarTerminos() {
-  let texto = inputBuscar.value.trim();
+// 🔍 BUSCAR (filtrando lo ya cargado, sin más fetch)
+function buscarTerminos() {
+  let texto = inputBuscar.value.trim().toLowerCase();
 
-  try {
-    let res = await fetch('http://localhost:3000/api/buscar-termino?texto=' + texto);
-    let datos = await res.json();
-    llenarTablaDiccionario(datos);
-  } catch (error) {
-    alert('Error al buscar.');
+  if (texto === '') {
+    // si no hay texto, mostramos todo
+    llenarTablaDiccionario(listaTerminos);
+    return;
   }
+
+  let filtrados = [];
+
+  listaTerminos.forEach(function (t) {
+    let esp = (t.terminoEspanol || '').toLowerCase();
+    let len = (t.terminoLengua || '').toLowerCase();
+
+    if (esp.indexOf(texto) !== -1 || len.indexOf(texto) !== -1) {
+      filtrados.push(t);
+    }
+  });
+
+  llenarTablaDiccionario(filtrados);
 }
 
 // EVENTOS
 btnGuardarTermino.addEventListener('click', registrarTermino);
-btnBuscarTermino.addEventListener('click', buscarTerminos);
-btnVerTodos.addEventListener('click', cargarTerminosDiccionario);
+
+btnBuscarTermino.addEventListener('click', function (e) {
+  e.preventDefault();
+  buscarTerminos();
+});
+
+btnVerTodos.addEventListener('click', function (e) {
+  e.preventDefault();
+  inputBuscar.value = '';
+  llenarTablaDiccionario(listaTerminos);
+});
 
 // AL CARGAR
 window.addEventListener('DOMContentLoaded', cargarTerminosDiccionario);
-
