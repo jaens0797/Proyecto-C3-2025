@@ -1,56 +1,126 @@
-const inputPalabraBuscar = document.getElementById('txtPalabraBuscar');
-const btnBuscarPalabra = document.getElementById('btnBuscarPalabra');
-const divResultadoDiccionario = document.getElementById('resultadoDiccionario');
+const inputTerminoEspanol = document.getElementById('txtTerminoEspanol');
+const inputTerminoLengua = document.getElementById('txtTerminoLengua');
+const inputPueblo = document.getElementById('txtPueblo');
+const inputAudio = document.getElementById('txtAudioPronunciacion');
 
-async function buscarPalabraDiccionario() {
-  const palabra = inputPalabraBuscar.value.trim();
+const btnGuardarTermino = document.getElementById('btnGuardarTermino');
+const btnBuscarTermino = document.getElementById('btnBuscarTermino');
+const btnVerTodos = document.getElementById('btnVerTodos');
 
-  if (!palabra) {
-    alert('Por favor escribí una palabra en español para buscar.');
+const inputBuscar = document.getElementById('txtBuscar');
+const tbodyDiccionario = document.getElementById('tbodyDiccionario');
+
+// LIMPIAR
+function limpiarFormularioDiccionario() {
+  inputTerminoEspanol.value = '';
+  inputTerminoLengua.value = '';
+  inputPueblo.value = '';
+  inputAudio.value = '';
+}
+
+// VALIDAR
+function validarDiccionario() {
+  if (inputTerminoEspanol.value.trim() === '') return false;
+  if (inputTerminoLengua.value.trim() === '') return false;
+  if (inputPueblo.value.trim() === '') return false;
+  return true;
+}
+
+// REGISTRAR
+async function registrarTermino() {
+  if (!validarDiccionario()) {
+    alert('Completá Español, Lengua y Pueblo.');
     return;
   }
 
+  let datos = {
+    terminoEspanol: inputTerminoEspanol.value.trim(),
+    terminoLengua: inputTerminoLengua.value.trim(),
+    pueblo: inputPueblo.value.trim(),
+    audioPronunciacion: inputAudio.value.trim()
+  };
+
   try {
-    // GET con query: ?palabra=...
-    const res = await fetch('http://localhost:3000/api/buscar-termino?palabra=' + encodeURIComponent(palabra));
-    const termino = await res.json();
+    let res = await fetch('http://localhost:3000/api/registrar-termino', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datos)
+    });
 
-    divResultadoDiccionario.innerHTML = '';
-
-    // RF-19 — mensaje si no existe
-    if (!termino || !termino.terminoEspanol) {
-      divResultadoDiccionario.innerHTML = '<p><b>No se encontraron resultados</b></p>';
-      return;
-    }
-
-    // RF-17 y RF-18 — mostrar traducción y ejemplo simple
-    let html = '';
-    html += '<p><b>Español:</b> ' + (termino.terminoEspanol || '') + '</p>';
-    html += '<p><b>En lengua indígena:</b> ' + (termino.terminoLengua || '') + '</p>';
-    html += '<p><b>Pueblo:</b> ' + (termino.pueblo || '') + '</p>';
-
-    if (termino.audioPronunciacion) {
-      html += '<p><audio controls src="' + termino.audioPronunciacion + '"></audio></p>';
-    }
-
-    html += '<p><i>Ejemplo de uso:</i> Podés usar esta palabra en una frase sencilla para practicarla.</p>';
-
-    divResultadoDiccionario.innerHTML = html;
-
+    let json = await res.json();
+    alert(json.msj);
+    limpiarFormularioDiccionario();
+    cargarTerminosDiccionario();
   } catch (error) {
-    console.error('Error al consultar el diccionario', error);
-    alert('Ocurrió un error al consultar el diccionario.');
+    alert('No se pudo registrar.');
   }
 }
 
-btnBuscarPalabra.addEventListener('click', function (e) {
-  e.preventDefault();
-  buscarPalabraDiccionario();
-});
+// LLENAR TABLA
+function llenarTablaDiccionario(lista) {
+  tbodyDiccionario.innerHTML = '';
 
-// Opcional: buscar con Enter
-inputPalabraBuscar.addEventListener('keyup', function (e) {
-  if (e.key === 'Enter') {
-    buscarPalabraDiccionario();
+  lista.forEach(t => {
+    let fila = document.createElement('tr');
+
+    let tdEspanol = document.createElement('td');
+    tdEspanol.textContent = t.terminoEspanol;
+
+    let tdLengua = document.createElement('td');
+    tdLengua.textContent = t.terminoLengua;
+
+    let tdPueblo = document.createElement('td');
+    tdPueblo.textContent = t.pueblo;
+
+    let tdAudio = document.createElement('td');
+    if (t.audioPronunciacion && t.audioPronunciacion.trim() !== '') {
+      let link = document.createElement('a');
+      link.href = t.audioPronunciacion;
+      link.target = '_blank';
+      link.textContent = 'Escuchar';
+      tdAudio.appendChild(link);
+    } else {
+      tdAudio.textContent = '—';
+    }
+
+    fila.appendChild(tdEspanol);
+    fila.appendChild(tdLengua);
+    fila.appendChild(tdPueblo);
+    fila.appendChild(tdAudio);
+
+    tbodyDiccionario.appendChild(fila);
+  });
+}
+
+// LISTAR
+async function cargarTerminosDiccionario() {
+  try {
+    let res = await fetch('http://localhost:3000/api/listar-terminos');
+    let datos = await res.json();
+    llenarTablaDiccionario(datos);
+  } catch (error) {
+    alert('Error al cargar.');
   }
-});
+}
+
+// BUSCAR
+async function buscarTerminos() {
+  let texto = inputBuscar.value.trim();
+
+  try {
+    let res = await fetch('http://localhost:3000/api/buscar-termino?texto=' + texto);
+    let datos = await res.json();
+    llenarTablaDiccionario(datos);
+  } catch (error) {
+    alert('Error al buscar.');
+  }
+}
+
+// EVENTOS
+btnGuardarTermino.addEventListener('click', registrarTermino);
+btnBuscarTermino.addEventListener('click', buscarTerminos);
+btnVerTodos.addEventListener('click', cargarTerminosDiccionario);
+
+// AL CARGAR
+window.addEventListener('DOMContentLoaded', cargarTerminosDiccionario);
+
