@@ -109,7 +109,7 @@ async function cargarTerminosDiccionario() {
   }
 }
 
-// 🔍 BUSCAR (filtrando lo ya cargado, sin más fetch)
+// BUSCAR (filtrando lo ya cargado, sin más fetch)
 function buscarTerminos() {
   let texto = inputBuscar.value.trim().toLowerCase();
 

@@ -29,8 +29,7 @@ async function cargarComunidades() {
       const tdEstado = document.createElement('td');
       tdEstado.textContent = com.estadoLengua;
 
-      // 👉 Si tus profes NO han hecho eliminar todavía, dejalo así
-      // (sin eliminar, solo mostrar lista)
+      // 
       fila.appendChild(tdNombre);
       fila.appendChild(tdPueblo);
       fila.appendChild(tdProvincia);
