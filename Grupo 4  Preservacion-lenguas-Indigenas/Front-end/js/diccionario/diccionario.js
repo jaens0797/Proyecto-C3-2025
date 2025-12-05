@@ -10,7 +10,7 @@ const btnVerTodos = document.getElementById('btnVerTodos');
 const inputBuscar = document.getElementById('txtBuscar');
 const tbodyDiccionario = document.getElementById('tbodyDiccionario');
 
-// 👉 aquí guardamos todo lo que viene de la BD
+// guardar todo lo que viene de la BD
 let listaTerminos = [];
 
 // LIMPIAR

@@ -8,7 +8,7 @@ async function cargarEventos() {
     // Limpiar tabla
     tbodyEventos.innerHTML = '';
 
-    // Ordenar por fecha ascendente (del más cercano al más lejano)
+    // Ordenar por fecha ascendente 
     datos = datos.sort(function (a, b) {
       const fechaA = new Date(a.fecha);
       const fechaB = new Date(b.fecha);
@@ -60,5 +60,5 @@ function mostrarEventos(lista) {
   });
 }
 
-// Ejecuta al cargar la página
+// Ejecutar
 cargarEventos();
