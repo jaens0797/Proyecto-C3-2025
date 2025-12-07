@@ -1,67 +1,196 @@
+// routes/usuario.route.js
 const express = require('express');
-const Usuario = require('../models/usuario.model');
 const router = express.Router();
+const Usuario = require('../models/usuario.model'); // ajusta la ruta si tu modelo está en otra carpeta
 
-// http://localhost:3000/api/registrar-usuario
-router.post('/registrar-usuario', async (req, res) => {
-    try {
-        const rolesPermitidos = ['admin', 'lider', 'docente', 'publico'];
+// ================================
+// LOGIN (POST /api/login)
+// ================================
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-        if (!rolesPermitidos.includes(req.body.rol)) {
-            return res.json({ error: 'Rol no válido' });
-        }
+    // Ejemplo muy simple, sin hash ni nada (ajusta según tu lógica real)
+    const usuario = await Usuario.findOne({ correo: email });
 
-        let nuevoUsuario = new Usuario({
-            nombre: req.body.nombre,
-            correo: req.body.correo,
-            rol: req.body.rol,
-            contrasenna: req.body.contrasenna
-        });
-
-        await nuevoUsuario.save();
-        res.json({ msj: 'El usuario se registró correctamente' });
-    } catch (error) {
-        res.json({ error });
+    if (!usuario) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Usuario no encontrado'
+      });
     }
+
+    // Aquí validarías password. De momento, solo comprobamos que venga algo:
+    if (!password) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Contraseña inválida'
+      });
+    }
+
+    // Si todo ok:
+    res.json({
+      ok: true,
+      mensaje: 'Login correcto',
+      usuario: {
+        _id: usuario._id,
+        nombre: usuario.nombre,
+        correo: usuario.correo,
+        rol: usuario.rol
+      }
+    });
+
+  } catch (error) {
+    console.error('Error en /login:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error interno en login'
+    });
+  }
 });
 
-// http://localhost:3000/api/listar-usuarios
-router.get('/listar-usuarios', async (req, res) => {
-    try {
-        const usuarios = await Usuario.find();
-        res.json(usuarios);
-    } catch (error) {
-        res.json({ error });
-    }
+// ================================
+// LISTAR USUARIOS (GET /api/usuarios)
+// ================================
+router.get('/usuarios', async (req, res) => {
+  try {
+    const lista = await Usuario.find();
+    res.json(lista);
+  } catch (error) {
+    console.error('Error listando usuarios:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al listar usuarios'
+    });
+  }
 });
 
-// http://localhost:3000/api/editar-usuario/:id
-router.put('/editar-usuario/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        const datos = {
-            nombre: req.body.nombre,
-            correo: req.body.correo,
-            rol: req.body.rol
-        };
+// ================================
+// CREAR USUARIO (POST /api/usuarios)
+// ================================
+router.post('/usuarios', async (req, res) => {
+  try {
+    const { nombre, correo, rol, password } = req.body;
 
-        await Usuario.findByIdAndUpdate(id, datos, { new: true });
-        res.json({ msj: 'El usuario se actualizó correctamente' });
-    } catch (error) {
-        res.json({ error });
-    }
+    const nuevo = new Usuario({
+      nombre,
+      correo,
+      rol,
+      password   // Ojo: aquí deberías encriptar en la vida real
+    });
+
+    await nuevo.save();
+
+    res.status(201).json({
+      ok: true,
+      mensaje: 'Usuario creado',
+      usuario: nuevo
+    });
+  } catch (error) {
+    console.error('Error creando usuario:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al crear usuario'
+    });
+  }
 });
 
-// http://localhost:3000/api/eliminar-usuario/:id
-router.delete('/eliminar-usuario/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        await Usuario.findByIdAndDelete(id);
-        res.json({ msj: 'El usuario se eliminó correctamente' });
-    } catch (error) {
-        res.json({ error });
+// ================================
+// EDITAR USUARIO (PUT /api/usuarios/:id)
+// ================================
+router.put('/usuarios/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, correo, rol, password } = req.body;
+
+    const cambios = { nombre, correo, rol };
+    if (password && password.trim().length > 0) {
+      cambios.password = password; // ideal: hash
     }
+
+    const actualizado = await Usuario.findByIdAndUpdate(id, cambios, {
+      new: true
+    });
+
+    if (!actualizado) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Usuario no encontrado'
+      });
+    }
+
+    res.json({
+      ok: true,
+      mensaje: 'Usuario actualizado',
+      usuario: actualizado
+    });
+  } catch (error) {
+    console.error('Error editando usuario:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al editar usuario'
+    });
+  }
+});
+// ==================================================
+//  OBTENER UN USUARIO POR ID (GET /api/usuarios/:id)
+// ==================================================
+router.get('/usuarios/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const usuario = await Usuario.findById(id);
+
+    if (!usuario) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Usuario no encontrado'
+      });
+    }
+
+    res.json({
+      ok: true,
+      usuario
+    });
+
+  } catch (error) {
+    console.error('Error en GET /usuarios/:id:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error en el servidor'
+    });
+  }
+});
+
+// ================================
+// ELIMINAR USUARIO (DELETE /api/usuarios/:id)
+// ================================
+router.delete('/usuarios/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const eliminado = await Usuario.findByIdAndDelete(id);
+
+    if (!eliminado) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Usuario no encontrado'
+      });
+    }
+
+    res.json({
+      ok: true,
+      mensaje: 'Usuario eliminado',
+      usuario: eliminado
+    });
+  } catch (error) {
+    console.error('Error eliminando usuario:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al eliminar usuario'
+    });
+  }
 });
 
 module.exports = router;
+
 
