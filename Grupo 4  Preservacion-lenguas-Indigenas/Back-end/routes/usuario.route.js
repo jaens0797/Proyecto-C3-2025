@@ -1,7 +1,7 @@
 // routes/usuario.route.js
 const express = require('express');
 const router = express.Router();
-const Usuario = require('../models/usuario.model'); // ajusta la ruta si tu modelo está en otra carpeta
+const Usuario = require('../models/usuario.model');
 
 // ================================
 // LOGIN (POST /api/login)
@@ -10,7 +10,6 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Ejemplo muy simple, sin hash ni nada (ajusta según tu lógica real)
     const usuario = await Usuario.findOne({ correo: email });
 
     if (!usuario) {
@@ -20,15 +19,14 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Aquí validarías password. De momento, solo comprobamos que venga algo:
-    if (!password) {
+    // Aquí solo validamos que venga password (en tu proyecto no hay hash)
+    if (!password || password !== usuario.contrasenna) {
       return res.status(400).json({
         ok: false,
-        mensaje: 'Contraseña inválida'
+        mensaje: 'Contraseña incorrecta'
       });
     }
 
-    // Si todo ok:
     res.json({
       ok: true,
       mensaje: 'Login correcto',
@@ -76,7 +74,7 @@ router.post('/usuarios', async (req, res) => {
       nombre,
       correo,
       rol,
-      password   // Ojo: aquí deberías encriptar en la vida real
+      contrasenna: password    // <-- CAMPO CORRECTO SEGÚN EL MODELO
     });
 
     await nuevo.save();
@@ -86,6 +84,7 @@ router.post('/usuarios', async (req, res) => {
       mensaje: 'Usuario creado',
       usuario: nuevo
     });
+
   } catch (error) {
     console.error('Error creando usuario:', error);
     res.status(500).json({
@@ -104,8 +103,9 @@ router.put('/usuarios/:id', async (req, res) => {
     const { nombre, correo, rol, password } = req.body;
 
     const cambios = { nombre, correo, rol };
+
     if (password && password.trim().length > 0) {
-      cambios.password = password; // ideal: hash
+      cambios.contrasenna = password; // <-- CAMPO CORRECTO
     }
 
     const actualizado = await Usuario.findByIdAndUpdate(id, cambios, {
@@ -124,6 +124,7 @@ router.put('/usuarios/:id', async (req, res) => {
       mensaje: 'Usuario actualizado',
       usuario: actualizado
     });
+
   } catch (error) {
     console.error('Error editando usuario:', error);
     res.status(500).json({
@@ -132,6 +133,7 @@ router.put('/usuarios/:id', async (req, res) => {
     });
   }
 });
+
 // ==================================================
 //  OBTENER UN USUARIO POR ID (GET /api/usuarios/:id)
 // ==================================================
@@ -182,6 +184,7 @@ router.delete('/usuarios/:id', async (req, res) => {
       mensaje: 'Usuario eliminado',
       usuario: eliminado
     });
+
   } catch (error) {
     console.error('Error eliminando usuario:', error);
     res.status(500).json({
@@ -192,5 +195,6 @@ router.delete('/usuarios/:id', async (req, res) => {
 });
 
 module.exports = router;
+
 
 
