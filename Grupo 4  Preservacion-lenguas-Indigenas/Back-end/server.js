@@ -41,7 +41,6 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/api', require('./routes/usuario.route'));
 app.use('/api', require('./routes/comunidad.route'));
 app.use('/api', require('./routes/recurso.route'));
-app.use('/api', require('./routes/curso.route'));
 app.use('/api', require('./routes/diccionario.route'));
 app.use('/api', require('./routes/evento.route'));
 

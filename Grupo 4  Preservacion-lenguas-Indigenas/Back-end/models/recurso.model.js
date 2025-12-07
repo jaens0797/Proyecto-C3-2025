@@ -14,4 +14,4 @@ const recursoSchema = new mongoose.Schema({
   fechaRegistro: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Recurso', recursoSchema);
+module.exports = mongoose.model('recurso', recursoSchema);
